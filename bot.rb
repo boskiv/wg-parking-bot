@@ -1,31 +1,28 @@
 # frozen_string_literal: true
 
 require 'telegram/bot'
+require 'mongoid'
 
-class BotController < Telegram::Bot::UpdatesController
-  def start!(*)
-    respond_with :message, text: 'Hello!'
-  end
+token = ENV['WG_BOT_TOKEN']
 
-  def park!(*)
-    respond_with :message, text: 'Parking!'
-  end
+Mongoid.load!('mongoid.yml', :parking)
+
+class Person
+  include Mongoid::Document
+  field :first_name
 end
 
-TOKEN = ENV['WG_BOT_TOKEN']
-bot = Telegram::Bot::Client.new(TOKEN)
+Telegram::Bot::Client.run(token, logger: Logger.new($stderr)) do |bot|
+  bot.logger.debug('Bot has been started')
 
-# poller-mode
-require 'logger'
-logger = Logger.new(STDOUT)
-
-if TOKEN.to_s.empty?
-  logger.error('WG_BOT_TOKEN is empty')
-  exit(-1)
-end
-poller = Telegram::Bot::UpdatesPoller.new(bot, BotController, logger: logger)
-poller.start
-
-map "/#{TOKEN}" do
-  run Telegram::Bot::Middleware.new(bot, BotController)
+  bot.listen do |message|
+    case message.text
+    when '/start'
+      person = Person.new
+      person.first_name = message.from.first_name
+      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
+    when '/stop'
+      bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
+    end
+  end
 end
