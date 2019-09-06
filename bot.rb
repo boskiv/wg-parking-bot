@@ -7,8 +7,8 @@ require_relative 'models/raffle'
 require 'rufus-scheduler'
 
 TELEGRAM_TOKEN = ENV['WG_BOT_TOKEN']
-KEYS_NUMBER = ENV['KEYS_NUMBER'] || 6
-GROUP_CHAT_ID = ENV['GROUP_CHAT_ID'] || -357_251_490 # default test room
+KEYS_NUMBER = ENV['KEYS_NUMBER'].to_i || 6
+GROUP_CHAT_ID = ENV['GROUP_CHAT_ID'].to_i || -357_251_490 # default test room
 ADMIN_LIST = ENV['ADMIN_LIST'] || ['boskiv']
 
 Mongoid.load!('config/mongoid.yml', :database)
