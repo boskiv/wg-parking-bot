@@ -1,4 +1,0 @@
-parking:
-  clients:
-    default:
-      uri: <%= ENV['MONGODB_URI'] || 'mongodb://localhost/testdatabase' %>

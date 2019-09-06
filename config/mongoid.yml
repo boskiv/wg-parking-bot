@@ -1,0 +1,6 @@
+development:
+  clients:
+    default:
+      uri: <%= ENV['MONGODB_URI'] || 'mongodb://localhost/parking' %>
+  options:
+    log_level: :debug
