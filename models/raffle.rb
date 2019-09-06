@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Raffle class to make a raffle
 class Raffle
   include Mongoid::Document
   field :date, type: Date, default: Date.today
@@ -7,8 +8,7 @@ class Raffle
 
   def shuffle(users, keys)
     last_raffle = Raffle.last
-    filtered_users = users - last_raffle.winners
-    winners = filtered_users.sample(keys)
-    winners
+    filtered_users = last_raffle.nil? ? users : users - last_raffle.winners
+    self.winners = filtered_users.sample(keys)
   end
 end
