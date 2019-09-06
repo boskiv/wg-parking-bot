@@ -17,7 +17,7 @@ scheduler = Rufus::Scheduler.new
 
 def shuffle(bot, chat_id)
   raffle = Raffle.new
-  users = User.where(skip: false).entries
+  users = User.where(absence: false).entries
   raffle.shuffle(users, KEYS_NUMBER)
   raffle.save
 
@@ -48,13 +48,13 @@ def register(bot, message)
   )
 end
 
-def skip(bot, message)
+def absence(bot, message)
   user = User.where(_id: message.from.id).first
-  user.skip = !user.skip
-  User.where(_id: message.from.id).update(skip: user.skip)
+  user.absence = !user.absence
+  User.where(_id: message.from.id).update(absence: user.absence)
   bot.api.sendMessage(
     chat_id: message.chat.id,
-    text: "You skip status update to #{user.skip}"
+    text: "You absence status update to #{user.absence}"
   )
 end
 
@@ -62,7 +62,7 @@ def status(bot, message)
   user = User.where(_id: message.from.id).first
   bot.api.sendMessage(
     chat_id: message.chat.id,
-    text: "Your login: #{user.username}.\nYour status: #{user.skip}"
+    text: "Your login: #{user.username}.\nYour absence status: #{user.absence}"
   )
 end
 
@@ -93,8 +93,8 @@ Telegram::Bot::Client.run(TELEGRAM_TOKEN,
     case message.text
     when '/register'
       register(bot, message)
-    when '/skip'
-      skip(bot, message)
+    when '/absence'
+      absence(bot, message)
     when '/status'
       status(bot, message)
     when '/info'

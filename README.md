@@ -3,7 +3,7 @@ Telegram bot to rotate parking keys between members
 
 # Logic
 - Register member (`/register`)
-- Handle absence (`/skip`)
+- Handle absence (`/absence`)
 - Handle last month winners (`/info`)
 - Rotate keys between uniq members (`/shuffle`) (only admin can do it manually)
 - Schedule rotation monthly
@@ -20,6 +20,6 @@ Telegram bot to rotate parking keys between members
 # Flow
 Last day of month bot run a task to decide a winners.
 Make a winners table and print it into channel. (It can be private message or public channel)
-If participant want to skip a round he must send `/skip` command to bot.
+If participant want to skip a round he must send `/absence` command to bot.
 
 

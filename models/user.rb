@@ -4,6 +4,6 @@ class User
   field :first_name, type: String
   field :last_name, type: String
   field :username, type: String
-  field :skip, type: Boolean, default: false
+  field :absence, type: Boolean, default: false
 
 end
