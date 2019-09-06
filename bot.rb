@@ -6,6 +6,8 @@ require_relative 'models/user'
 require_relative 'models/raffle'
 
 TELEGRAM_TOKEN = ENV['WG_BOT_TOKEN']
+KEYS_NUMBER = ENV['KEYS_NUMBER'] || 6
+
 Mongoid.load!('config/mongoid.yml', :development)
 
 Telegram::Bot::Client.run(TELEGRAM_TOKEN,
@@ -52,7 +54,7 @@ Telegram::Bot::Client.run(TELEGRAM_TOKEN,
     when '/shuffle'
       raffle = Raffle.new
       users = User.where(skip: false).entries
-      winners = raffle.shuffle(users)
+      winners = raffle.shuffle(users, KEYS_NUMBER)
       raffle.winners = winners
       raffle.save
       s = StringIO.new

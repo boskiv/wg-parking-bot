@@ -5,10 +5,10 @@ class Raffle
   field :date, type: Date, default: Date.today
   embeds_many :winners, class_name: 'User'
 
-  def shuffle(users)
+  def shuffle(users, keys)
     last_raffle = Raffle.last
     filtered_users = users - last_raffle.winners
-    winners = filtered_users.sample(3)
+    winners = filtered_users.sample(keys)
     winners
   end
 end
