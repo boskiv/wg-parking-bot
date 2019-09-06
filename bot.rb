@@ -83,7 +83,8 @@ end
 Telegram::Bot::Client.run(TELEGRAM_TOKEN,
                           logger: Logger.new($stderr)) do |bot|
   bot.logger.debug('Bot has been started')
-
+  require 'socket'
+  TCPServer.new ENV['PORT'] || 8000
   scheduler = Rufus::Scheduler.new
   scheduler.cron('@monthly') do
     shuffle(bot, GROUP_CHAT_ID)
